@@ -26,5 +26,9 @@ console.log(`Installing dependencies for ${repoName}`);
 const installedDeps = runCommand(installDepthCommand);
 if(!installedDeps) process.exit({code: -1});
 
+const openRepoInVSCodeCommand = `cd ${repoName} && code .`
+const openedVSCode = runCommand(openRepoInVSCodeCommand);
+if(!openedVSCode) process.exit({code: -1});
+
 console.log("Congratulations! You are ready. Follow the following commands to start");
 console.log(`cd ${repoName} && npm start`);
