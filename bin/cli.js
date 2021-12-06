@@ -13,7 +13,7 @@ function runCommand(command) {
 }
 
 const repoName = process.argv[2];
-const githubRepo = `https://github.com/jornejongsma/create-app.git`;
+const githubRepo = `https://github.com/jornejongsma/create-app`;
 const gitCheckoutCommand = `git clone --depth 1 ${githubRepo} ${repoName}`;
 const installDepthCommand = `cd ${repoName} && yarn install`;
 
