@@ -13,6 +13,8 @@ function runCommand(command) {
 }
 
 const repoName = process.argv[2];
+
+// This link should be public
 const githubRepo = `https://github.com/jornejongsma/create-app`;
 const gitCheckoutCommand = `git clone --depth 1 ${githubRepo} ${repoName}`;
 const installDepthCommand = `cd ${repoName} && yarn install`;
