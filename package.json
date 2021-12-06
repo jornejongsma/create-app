@@ -1,6 +1,15 @@
 {
-  "name": "create-app",
+  "name": "@jornejongsma/create-app",
   "version": "1.0.0",
   "main": "index.js",
-  "license": "MIT"
+  "license": "MIT",
+  "private": true,
+  "bin": "./bin/cli.js",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/@jornejongsma"
+  },
+  "dependencies": {
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  }
 }
