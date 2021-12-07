@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 const { execSync } = require('child_process');
+const fs = require('fs');
 
 function runCommand(command) {
   try {
@@ -18,6 +19,7 @@ const githubRepo = `https://github.com/jornejongsma/create-app`;
 const gitCheckoutCommand = `git clone --depth 1 ${githubRepo} ${repoName}`;
 const installDepthCommand = `cd ${repoName} && yarn install`;
 
+
 console.log(`Cloning the repository with name ${repoName}`);
 const checkedOut = runCommand(gitCheckoutCommand);
 if(!checkedOut) process.exit({code: -1});
@@ -25,6 +27,10 @@ if(!checkedOut) process.exit({code: -1});
 console.log(`Installing dependencies for ${repoName}`);
 const installedDeps = runCommand(installDepthCommand);
 if(!installedDeps) process.exit({code: -1});
+
+console.log(`clean up`);
+const folder = process.cwd();
+console.log(`corrent location is: ${folder}/repoName`)
 
 const openRepoInVSCodeCommand = `cd ${repoName} && code .`
 const openedVSCode = runCommand(openRepoInVSCodeCommand);
