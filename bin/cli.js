@@ -75,9 +75,10 @@ const deleteGit = deleteFolder(gitLocation);
 if (!deleteGit) process.exit(1);
 
 const gitInit = `git init`;
+const gitAddAll = `git add .`
 const gitCommit = `git commit -m "first commit"`;
 const gitBranch = `git branch -M main`;
-const startGitCommand = `cd ${repoName} && ${gitInit} && ${gitCommit} && ${gitBranch}`;
+const startGitCommand = `cd ${repoName} && ${gitInit} && ${gitAddAll} && ${gitCommit} && ${gitBranch}`;
 const startGit = runCommand(startGitCommand);
 if (!startGit) process.exit(1);
 
