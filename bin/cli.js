@@ -63,7 +63,7 @@ newPackage["name"] = repoName;
 newPackage["version"] = "0.1.0";
 newPackage["private"] = true;
 
-const newRawPackage = JSON.stringify(newPackage);
+const newRawPackage = JSON.stringify(newPackage, null, 2);
 const writePackage = writeFile(packageLocation, newRawPackage);
 if (!writePackage) process.exit(1);
 
@@ -77,7 +77,7 @@ if (!deleteGit) process.exit(1);
 const gitInit = `git init`;
 const gitCommit = `git commit -m "first commit"`;
 const gitBranch = `git branch -M main`;
-const startGitCommand = `${gitInit} && ${gitCommit} && ${gitBranch}`;
+const startGitCommand = `cd ${repoName} && ${gitInit} && ${gitCommit} && ${gitBranch}`;
 const startGit = runCommand(startGitCommand);
 if (!startGit) process.exit(1);
 
