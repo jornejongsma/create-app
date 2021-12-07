@@ -30,7 +30,17 @@ if(!installedDeps) process.exit({code: -1});
 
 console.log(`clean up`);
 const folder = process.cwd();
-console.log(`corrent location is: ${folder}/repoName`)
+const repoLocation = `${folder}\\${repoName}`
+console.log(`current location is: ${folder}\\${repoName}`)
+fs.readdir(repoLocation, (err, files) => {
+  if(err) {
+    console.log('error', err)
+    return err
+  }
+  files.forEach(file => {
+    console.log(file)
+  })
+})
 
 const openRepoInVSCodeCommand = `cd ${repoName} && code .`
 const openedVSCode = runCommand(openRepoInVSCodeCommand);
