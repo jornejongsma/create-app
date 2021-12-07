@@ -54,7 +54,7 @@ const repoLocation = `${folder}\\${repoName}`;
 const binLocation = `${repoLocation}\\bin`;
 const githubLocation = `${repoLocation}\\.github`;
 const gitLocation = `${repoLocation}\\.git`;
-const packageLocation = `${repoLocation}\\.package.json`;
+const packageLocation = `${repoLocation}\\package.json`;
 const rawPackage = fs.readFileSync(packageLocation);
 const package = JSON.parse(rawPackage);
 
