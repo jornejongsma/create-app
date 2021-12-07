@@ -1,8 +1,9 @@
 {
   "name": "@jornejongsma/create-app",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "main": "index.js",
   "license": "MIT",
+  "private": true,
   "bin": "./bin/cli.js",
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/@jornejongsma"

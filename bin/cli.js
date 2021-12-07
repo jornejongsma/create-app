@@ -23,6 +23,16 @@ function deleteFolder(location) {
   return true
 }
 
+function writeFile(location, data) {
+  try {
+    fs.writeFileSync(location, data);
+  } catch (error) {
+    console.error(`Failed to write ${location}`)
+    return false
+  }
+  return true
+}
+
 const repoName = process.argv[2];
 
 const githubRepo = `https://github.com/jornejongsma/create-app`;
@@ -43,11 +53,33 @@ const folder = process.cwd();
 const repoLocation = `${folder}\\${repoName}`;
 const binLocation = `${repoLocation}\\bin`;
 const githubLocation = `${repoLocation}\\.github`;
+const gitLocation = `${repoLocation}\\.git`;
+const packageLocation = `${repoLocation}\\.package.json`;
+const rawPackage = fs.readFileSync(packageLocation);
+const package = JSON.parse(rawPackage);
+
+const {bin, publishConfig, ...newPackage} = package;
+newPackage['name'] = repoName;
+newPackage['version'] = "0.1.0";
+
+const newRawPackage = JSON.stringify(newPackage);
+const writePackage = writeFile(packageLocation, newRawPackage)
+if(!writePackage) process.exit(1);
 
 const deleteBin = deleteFolder(binLocation);
 if(!deleteBin) process.exit(1);
 const deleteGithub = deleteFolder(githubLocation);
 if(!deleteGithub) process.exit(1);
+const deleteGit = deleteFolder(gitLocation);
+if(!deleteGit) process.exit(1);
+
+const gitInit = `git init`;
+const gitCommit = `git commit -m "first commit"`;
+const gitBranch = `git branch -M main`;
+const startGitCommand = `${gitInit} && ${gitCommit} && ${gitBranch}`;
+const startGit = runCommand(startGitCommand)
+if(!startGit) process.exit(1);
+
 
 
 // console.log(`current location is: ${folder}\\${repoName}`)
