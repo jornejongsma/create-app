@@ -93,7 +93,7 @@ if (!startGit) process.exit(1);
 //   })
 // })
 
-const openedVSCode = runCommand(openRepoInVSCodeCommand);
-if (!openedVSCode) process.exit(1);
+// const openedVSCode = runCommand(openRepoInVSCodeCommand);
+// if (!openedVSCode) process.exit(1);
 
 console.log("Congratulations, you are ready!");
