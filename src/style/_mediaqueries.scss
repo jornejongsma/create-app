@@ -1,0 +1,92 @@
+$mobile-landscape: 480px;
+@mixin mobile-landscape {
+  @media (max-height: #{$mobile-landscape})  and (orientation: landscape){
+    @content;
+  } 
+}
+$tablet-portait: 768px;
+@mixin tablet-portrait {
+  @media (min-width: #{$tablet-portait}) {
+    @content;
+  } 
+}
+
+$tablet-landscape: 992px;
+@mixin tablet-landscape {
+  @media (min-width: #{$tablet-landscape}) {
+    @content;
+  } 
+}
+
+$desktop: 1200px;
+@mixin desktop {
+  @media (min-width: #{$desktop}) {
+    @content;
+  } 
+}
+
+@mixin landscape {
+  @media (orientation: landscape) {
+    @content;
+  } 
+}
+
+$small-phones: 374px;
+@mixin small-phones {
+  @media (max-width: #{$small-phones}) {
+    @content;
+  } 
+} 
+
+
+
+
+
+// $tablet-portrait: 768px;
+// @mixin tablet-portrait {
+//   @media (min-width: #{$tablet-portrait}) and (orientation: portrait) {
+//     @content;
+//   } 
+// }
+
+// $tablet-landscape: 992px;
+// @mixin tablet-landscape {
+//   @media (min-width: #{$tablet-landscape}) and (orientation: landscape) {
+//     @content;
+//   } 
+// }
+
+
+// $mobile-portrait: 420px;
+// @mixin mobile-portrait {
+//   @media (max-height: #{$mobile-portrait}) and (orientation: portrait){
+//     @content;
+//   } 
+// }
+
+
+
+
+
+// source: https://ricostacruz.com/til/css-media-query-breakpoints
+
+// Mobile portait (320px to 414px) - Small 
+// @media screen and (max-width: 479.98px) {
+// }
+
+// //Mobile landscape (568px to 812px) - Small
+// @media screen and (min-width: 480px) {
+// }
+
+// // Tablet portait (768px to 834px) - Medium
+// @media screen and (min-width: 768px) {
+// }
+
+// //Tablet landscape (992px to 1112px) - Large
+// @media screen and (min-width: 992px) {
+// }
+
+
+// // Laptop & desktop displays (1200px+) - Extra Large
+// @media screen and (min-width: 1200px) {
+// }

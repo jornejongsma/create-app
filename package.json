@@ -1,15 +1,44 @@
 {
   "name": "@jornejongsma/create-app",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "main": "index.js",
   "license": "MIT",
   "bin": "./bin/cli.js",
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/@jornejongsma"
   },
+  "scripts": {
+    "build": "webpack --config-name buildConfig --progress",
+    "dev": "webpack --config-name devConfig --progress",
+    "start": "webpack serve --config-name devConfig",
+    "https": "cd dist && http-server -S -C ../cert/cert.pem -K ../cert/key.pem -p 8081"
+  },
   "dependencies": {
+    "@xstate/inspect": "^0.5.2",
+    "@xstate/react": "^1.6.3",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "react-helmet": "^6.1.0"
+    "react-helmet": "^6.1.0",
+    "react-loadable": "^5.5.0",
+    "xstate": "^4.26.1",
+    "zustand": "^3.6.7"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.16.0",
+    "@babel/preset-env": "^7.16.4",
+    "@babel/preset-react": "^7.16.0",
+    "babel-loader": "^8.2.3",
+    "css-loader": "^6.5.1",
+    "eslint": "^8.4.1",
+    "eslint-plugin-react": "^7.27.1",
+    "file-loader": "^6.2.0",
+    "html-webpack-plugin": "^5.5.0",
+    "node-sass": "^7.0.0",
+    "sass-loader": "^12.4.0",
+    "style-loader": "^3.3.1",
+    "url-loader": "^4.1.1",
+    "webpack": "^5.65.0",
+    "webpack-cli": "^4.9.1",
+    "webpack-dev-server": "^4.6.0"
   }
 }
