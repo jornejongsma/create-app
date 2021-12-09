@@ -99,19 +99,22 @@ if (!startGit) process.exit(1);
 const openWorkspaceCommand = `${workspaceLocation}`;
 // const openedWorkspace = runCommand(openWorkspaceCommand);
 // if (!openedWorkspace) process.exit(1);
-exec(openWorkspaceCommand, (error, stdout, stderr) => {
-  if (error) {
-      console.log(`error: ${error.message}`);
-      process.exit(1)
-      return;
-  }
-  if (stderr) {
-      console.log(`stderr: ${stderr}`);
-      process.exit(1)
-      return;
-  }
-  console.log(`stdout: ${stdout}`);
-  console.log('Congratulations, you are ready!');
-  // process.exit(0)
-})
+setTimeout(() => {
+  exec(openWorkspaceCommand, (error, stdout, stderr) => {
+    if (error) {
+        console.log(`error: ${error.message}`);
+        process.exit(1)
+        return;
+    }
+    if (stderr) {
+        console.log(`stderr: ${stderr}`);
+        process.exit(1)
+        return;
+    }
+    console.log(`stdout: ${stdout}`);
+    console.log('Congratulations, you are ready!');
+    // process.exit(0)
+  })
+
+}, 3000)
 
