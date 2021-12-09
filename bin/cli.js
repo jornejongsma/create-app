@@ -48,6 +48,7 @@ if (!repoName) {
   });
 } else {
   runIstallation()
+  process.exit(0);
 }
 
 rl.on("close", () => {
