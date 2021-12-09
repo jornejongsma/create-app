@@ -112,6 +112,6 @@ exec(openWorkspaceCommand, (error, stdout, stderr) => {
   }
   console.log(`stdout: ${stdout}`);
   console.log('Congratulations, you are ready!');
-  process.exit(0)
+  // process.exit(0)
 })
 
