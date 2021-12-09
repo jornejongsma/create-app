@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const { execSync, exec } = require('child_process');
+const { execSync } = require('child_process');
 const fs = require('fs');
 
 function runCommand(command) {
@@ -89,8 +89,8 @@ if (!deleteGit) process.exit(1);
 
 const gitInit = `git init`;
 const gitAddAll = `git add .`;
-const gitCommit = `git commit -m "first commit"`;
-const gitBranch = `git branch -q -M main`;
+const gitCommit = `git commit -q -m "first commit"`;
+const gitBranch = `git branch -M main`;
 const startGitCommand = `cd ${repoName} && ${gitInit} && ${gitAddAll} && ${gitCommit} && ${gitBranch}`;
 const startGit = runCommand(startGitCommand);
 if (!startGit) process.exit(1);
