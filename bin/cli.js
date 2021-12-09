@@ -37,7 +37,7 @@ const repoName = process.argv[2];
 
 const githubRepo = `https://github.com/jornejongsma/create-app`;
 const gitCheckoutCommand = `git clone --depth 1 ${githubRepo} ${repoName}`;
-const installDepthCommand = `cd ${repoName} && yarn install`;
+const installDepthCommand = `cd ${repoName} && yarn install --silent`;
 
 console.log(`Cloning the repository with name ${repoName}`);
 const checkedOut = runCommand(gitCheckoutCommand);
@@ -90,31 +90,9 @@ if (!deleteGit) process.exit(1);
 const gitInit = `git init`;
 const gitAddAll = `git add .`;
 const gitCommit = `git commit -m "first commit"`;
-const gitBranch = `git branch -M main`;
+const gitBranch = `git branch -q -M main`;
 const startGitCommand = `cd ${repoName} && ${gitInit} && ${gitAddAll} && ${gitCommit} && ${gitBranch}`;
 const startGit = runCommand(startGitCommand);
 if (!startGit) process.exit(1);
 
-
-const openWorkspaceCommand = `${workspaceLocation}`;
-// const openedWorkspace = runCommand(openWorkspaceCommand);
-// if (!openedWorkspace) process.exit(1);
-setTimeout(() => {
-  exec(openWorkspaceCommand, (error, stdout, stderr) => {
-    if (error) {
-        console.log(`error: ${error.message}`);
-        process.exit(1)
-        return;
-    }
-    if (stderr) {
-        console.log(`stderr: ${stderr}`);
-        process.exit(1)
-        return;
-    }
-    console.log(`stdout: ${stdout}`);
-    console.log('Congratulations, you are ready!');
-    // process.exit(0)
-  })
-
-}, 3000)
-
+console.log('Congratulations, you are ready!');
