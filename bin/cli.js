@@ -102,13 +102,16 @@ const openWorkspaceCommand = `${workspaceLocation}`;
 exec(openWorkspaceCommand, (error, stdout, stderr) => {
   if (error) {
       console.log(`error: ${error.message}`);
+      process.exit(1)
       return;
   }
   if (stderr) {
       console.log(`stderr: ${stderr}`);
+      process.exit(1)
       return;
   }
   console.log(`stdout: ${stdout}`);
+  console.log('Congratulations, you are ready!');
+  process.exit(0)
 })
 
-console.log('Congratulations, you are ready!');
