@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const { execSync } = require('child_process');
+const { execSync, exec } = require('child_process');
 const fs = require('fs');
 
 function runCommand(command) {
@@ -95,10 +95,20 @@ const startGitCommand = `cd ${repoName} && ${gitInit} && ${gitAddAll} && ${gitCo
 const startGit = runCommand(startGitCommand);
 if (!startGit) process.exit(1);
 
-setTimeout(() => {
-  const openWorkspaceCommand = `${workspaceLocation}`;
-  const openedWorkspace = runCommand(openWorkspaceCommand);
-  if (!openedWorkspace) process.exit(1);
-}, 500)
+
+const openWorkspaceCommand = `${workspaceLocation}`;
+// const openedWorkspace = runCommand(openWorkspaceCommand);
+// if (!openedWorkspace) process.exit(1);
+exec(openWorkspaceCommand, (error, stdout, stderr) => {
+  if (error) {
+      console.log(`error: ${error.message}`);
+      return;
+  }
+  if (stderr) {
+      console.log(`stderr: ${stderr}`);
+      return;
+  }
+  console.log(`stdout: ${stdout}`);
+})
 
 console.log('Congratulations, you are ready!');
