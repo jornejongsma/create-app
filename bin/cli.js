@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 
-const { execSync } = require("child_process");
-const fs = require("fs");
+const { execSync } = require('child_process');
+const fs = require('fs');
 
 function runCommand(command) {
   try {
-    execSync(`${command}`, { stdio: "inherit" });
+    execSync(`${command}`, { stdio: 'inherit' });
   } catch (error) {
     console.error(`Failed to execute ${command}`, error);
     return false;
@@ -59,13 +59,27 @@ const rawPackage = fs.readFileSync(packageLocation);
 const package = JSON.parse(rawPackage);
 
 const { bin, publishConfig, ...newPackage } = package;
-newPackage["name"] = repoName;
-newPackage["version"] = "0.1.0";
-newPackage["private"] = true;
+newPackage['name'] = repoName;
+newPackage['version'] = '0.1.0';
+newPackage['private'] = true;
 
 const newRawPackage = JSON.stringify(newPackage, null, 2);
 const writePackage = writeFile(packageLocation, newRawPackage);
 if (!writePackage) process.exit(1);
+
+const workspaceData = {
+  folders: [
+    {
+      path: '.',
+    },
+  ],
+  settings: {},
+};
+
+const workspaceLocation  = `${repoLocation}\\${repoName}.code-workspace`
+const rawWorkspace = JSON.stringify(workspaceData, null, 2);
+const writeWorkspace = writeFile(workspaceLocation, rawWorkspace)
+if (!writeWorkspace) process.exit(1);
 
 const deleteBin = deleteFolder(binLocation);
 if (!deleteBin) process.exit(1);
@@ -75,7 +89,7 @@ const deleteGit = deleteFolder(gitLocation);
 if (!deleteGit) process.exit(1);
 
 const gitInit = `git init`;
-const gitAddAll = `git add .`
+const gitAddAll = `git add .`;
 const gitCommit = `git commit -m "first commit"`;
 const gitBranch = `git branch -M main`;
 const startGitCommand = `cd ${repoName} && ${gitInit} && ${gitAddAll} && ${gitCommit} && ${gitBranch}`;
@@ -96,4 +110,4 @@ if (!startGit) process.exit(1);
 // const openedVSCode = runCommand(openRepoInVSCodeCommand);
 // if (!openedVSCode) process.exit(1);
 
-console.log("Congratulations, you are ready!");
+console.log('Congratulations, you are ready!');
