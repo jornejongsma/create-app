@@ -95,8 +95,10 @@ const startGitCommand = `cd ${repoName} && ${gitInit} && ${gitAddAll} && ${gitCo
 const startGit = runCommand(startGitCommand);
 if (!startGit) process.exit(1);
 
-const openWorkspaceCommand = `${workspaceLocation}`;
-const openedWorkspace = runCommand(openWorkspaceCommand);
-if (!openedWorkspace) process.exit(1);
+setTimeout(() => {
+  const openWorkspaceCommand = `${workspaceLocation}`;
+  const openedWorkspace = runCommand(openWorkspaceCommand);
+  if (!openedWorkspace) process.exit(1);
+}, 500)
 
 console.log('Congratulations, you are ready!');
