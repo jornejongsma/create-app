@@ -15,7 +15,7 @@ function runCommand(command) {
 
 function deleteFolder(location) {
   try {
-    fs.rmdirSync(location, { recursive: true });
+    fs.rmSync(location, { recursive: true });
   } catch (error) {
     console.error(`Failed to remove ${location}`);
     return false;
@@ -38,7 +38,6 @@ const repoName = process.argv[2];
 const githubRepo = `https://github.com/jornejongsma/create-app`;
 const gitCheckoutCommand = `git clone --depth 1 ${githubRepo} ${repoName}`;
 const installDepthCommand = `cd ${repoName} && yarn install`;
-const openRepoInVSCodeCommand = `code .\\${repoName}`;
 
 console.log(`Cloning the repository with name ${repoName}`);
 const checkedOut = runCommand(gitCheckoutCommand);
@@ -56,9 +55,9 @@ const githubLocation = `${repoLocation}\\.github`;
 const gitLocation = `${repoLocation}\\.git`;
 const packageLocation = `${repoLocation}\\package.json`;
 const rawPackage = fs.readFileSync(packageLocation);
-const package = JSON.parse(rawPackage);
+const packageData = JSON.parse(rawPackage);
 
-const { bin, publishConfig, ...newPackage } = package;
+const { bin, publishConfig, ...newPackage } = packageData;
 newPackage['name'] = repoName;
 newPackage['version'] = '0.1.0';
 newPackage['private'] = true;
@@ -96,18 +95,8 @@ const startGitCommand = `cd ${repoName} && ${gitInit} && ${gitAddAll} && ${gitCo
 const startGit = runCommand(startGitCommand);
 if (!startGit) process.exit(1);
 
-// console.log(`current location is: ${folder}\\${repoName}`)
-// fs.readdir(repoLocation, (err, files) => {
-//   if(err) {
-//     console.log('error', err)
-//     return err
-//   }
-//   files.forEach(file => {
-//     console.log(file)
-//   })
-// })
-
-// const openedVSCode = runCommand(openRepoInVSCodeCommand);
-// if (!openedVSCode) process.exit(1);
+const openWorkspaceCommand = `${workspaceLocation}`;
+const openedWorkspace = runCommand(openWorkspaceCommand);
+if (!openedWorkspace) process.exit(1);
 
 console.log('Congratulations, you are ready!');
