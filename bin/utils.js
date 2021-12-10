@@ -1,6 +1,6 @@
 const { execSync } = require('child_process');
 
-export function runCommand(command) {
+function runCommand(command) {
   try {
     execSync(`${command}`, { stdio: "inherit" });
   } catch (error) {
