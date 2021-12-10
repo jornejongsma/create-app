@@ -4,9 +4,9 @@ const fs = require('fs');
 const readLine = require('readline');
 const { execSync } = require('child_process');
 
-function runCommand(command) {
+function runCommand(command, silent) {
   try {
-    execSync(`${command}`, { stdio: 'inherit' });
+    execSync(`${command}`, { stdio: silent ? 'pipe' : 'inherit' });
   } catch (error) {
     console.error(`Failed to execute ${command}`, error);
     process.exit(1);
@@ -121,7 +121,7 @@ function getOpenSSL() {
 function genCertificate(openSSL) {
   // short version
   if(!makeDir(`${repoLocation}\\cert`)) return false
-  runCommand(`${openSSL} req -x509 -newkey rsa:4096 -nodes -out ${repoLocation}\\cert\\ssl.crt -keyout ${repoLocation}\\cert\\ssl.key -days 3650 -subj "/C=NL/O=-/OU=-/CN=-"`)
+  runCommand(`${openSSL} req -x509 -newkey rsa:4096 -nodes -out ${repoLocation}\\cert\\ssl.crt -keyout ${repoLocation}\\cert\\ssl.key -days 3650 -subj "/C=NL/O=-/OU=-/CN=-"`, true)
   
   /* //Creates passphrase.txt
   runCommand(`${openSSL} rand -base64 48 > passphrase.txt`);
