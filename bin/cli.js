@@ -146,11 +146,10 @@ function runIstallation() {
   if (!deleteGit) process.exit(1);
 
   const gitInit = `git init`; //deze zou ook silent kunnen?
-  const gitConfig = `git config core.autocrlf true`;
-  const gitAddAll = `git add .`;
+  const gitAddAll = `git add . 1>/dev/null 2>/dev/null`;
   const gitCommit = `git commit -q -m "first commit"`;
   const gitBranch = `git branch -M main`;
-  const startGitCommand = `cd ${repoName} && ${gitInit} && ${gitConfig} && ${gitAddAll} && ${gitCommit} && ${gitBranch}`;
+  const startGitCommand = `cd ${repoName} && ${gitInit} && ${gitAddAll} && ${gitCommit} && ${gitBranch}`;
   runCommand(startGitCommand);
 
   console.log('Congratulations, you are ready!'); //Kelurtje rood?!
