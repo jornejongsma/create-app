@@ -89,17 +89,19 @@ function getOpenSSL() {
 
 // Source: https://gist.github.com/thbkrkr/aa16435cb6c183e55a33
 function genCertificate(openSSL) {
-  if(!makeDir(`${repoLocation}\\cert`)) return false
-  runCommand(`${openSSL} req -x509 -newkey rsa:4096 -nodes -out ${repoLocation}\\cert\\ssl.crt -keyout ${repoLocation}\\cert\\ssl.key -days 3650 -subj "/C=NL/O=-/OU=-/CN=-"`, true)
+  if (!makeDir(`${repoLocation}\\cert`)) return false;
+  runCommand(
+    `${openSSL} req -x509 -newkey rsa:4096 -nodes -out ${repoLocation}\\cert\\ssl.crt -keyout ${repoLocation}\\cert\\ssl.key -days 3650 -subj "/C=NL/O=-/OU=-/CN=-"`,
+    true
+  );
 }
 
 function runIstallation() {
-  
   console.log(`Cloning the repository with name ${repoName}`); //niet perse nodig?!
   const githubRepo = `https://github.com/jornejongsma/create-app`;
   const gitCheckoutCommand = `git clone --depth 1 ${githubRepo} ${repoName}`; //Zou dit command silent kunnen? Hier zitten wel echt progressie logs aanvast
   runCommand(gitCheckoutCommand);
-  
+
   console.log(`Installing dependencies for ${repoName}`); //Volgende Fase
   const installDepthCommand = `cd ${repoName} && yarn install --silent`; //Deze is al Silent...
   runCommand(installDepthCommand);
@@ -145,12 +147,27 @@ function runIstallation() {
   const deleteGit = deleteFolder(gitLocation);
   if (!deleteGit) process.exit(1);
 
-  const gitInit = `git init --quiet`; //deze zou ook silent kunnen?
-  const gitAddAll = `git add . --quiet`;
+  // const gitInit = `git init --quiet`; //deze zou ook silent kunnen?
+  // const gitAddAll = `git add . --quiet`;
+  // const gitCommit = `git commit --quiet -m "first commit"`;
+  // const gitBranch = `git branch --quiet -M main`;
+  // const startGitCommand = `cd ${repoName} && ${gitInit} && ${gitAddAll} && ${gitCommit} && ${gitBranch}`;
+  // runCommand(startGitCommand);
+
+  const gitInit = `git init --quiet`;
+  const gitDeactivate = `git config core.autocrlf false`;
+  const gitAddAll = `git add .`;
   const gitCommit = `git commit --quiet -m "first commit"`;
-  const gitBranch = `git branch --quiet -M main`;
-  const startGitCommand = `cd ${repoName} && ${gitInit} && ${gitAddAll} && ${gitCommit} && ${gitBranch}`;
-  runCommand(startGitCommand);
+  const gitBranch = `git branch -M main`;
+  const gitActivate = `git config core.autocrlf false`;
+
+  runCommand(`cd ${repoName}`);
+  runCommand(gitInit);
+  runCommand(gitDeactivate);
+  runCommand(gitAddAll);
+  runCommand(gitCommit);
+  runCommand(gitBranch);
+  runCommand(gitActivate);
 
   console.log('Congratulations, you are ready!'); //Kelurtje rood?!
 }
