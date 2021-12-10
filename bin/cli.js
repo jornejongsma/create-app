@@ -161,13 +161,8 @@ function runIstallation() {
   const gitBranch = `git branch -M main`;
   const gitActivate = `git config core.autocrlf false`;
 
-  runCommand(`cd ${repoName}`);
-  runCommand(gitInit);
-  runCommand(gitDeactivate);
-  runCommand(gitAddAll);
-  runCommand(gitCommit);
-  runCommand(gitBranch);
-  runCommand(gitActivate);
+  runCommand(`cd ${repoName} && ${gitInit} && ${gitDeactivate} && ${gitAddAll} && ${gitCommit} && ${gitBranch} && ${gitActivate}`);
+
 
   console.log('Congratulations, you are ready!'); //Kelurtje rood?!
 }
