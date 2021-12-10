@@ -2,7 +2,17 @@
 
 const fs = require('fs');
 const readLine = require('readline');
-const { runCommand } = require('./utils.js')
+const { execSync } = require('child_process');
+
+function runCommand(command) {
+  try {
+    execSync(`${command}`, { stdio: 'inherit' });
+  } catch (error) {
+    console.error(`Failed to execute ${command}`, error);
+    process.exit(1);
+  }
+  return true;
+}
 
 function deleteFolder(location) {
   try {
@@ -37,15 +47,44 @@ if (!repoName) {
     rl.close();
   });
 } else {
-  runIstallation()
+  runIstallation();
   process.exit(0);
 }
 
-rl.on("close", () => {
-  runIstallation()
+rl.on('close', () => {
+  runIstallation();
   process.exit(0);
-})
+});
 
+const folder = process.cwd();
+const repoLocation = `${folder}\\${repoName}`;
+
+function genCertificate() {
+  //Creates passphrase.txt
+  runCommand(`openssl rand -base64 48 > passphrase.txt`);
+
+  // Creates server.key
+  runCommand(`openssl genrsa -aes128 -passout file:passphrase.txt -out server.key 2048`);
+
+  // Creates server.csr
+  runCommand(
+    `openssl req -new -passin file:passphrase.txt -key server.key -out server.csr -subj "/C=FR/O=krkr/OU=Domain Control Validated/CN=*.krkr.io"`
+  );
+
+  // First duplicate the server.key to server.key.org
+  // Than remove passphrase from server.key
+  runCommand(`cp server.key server.key.org`);
+  runCommand(`openssl rsa -in server.key.org -passin file:passphrase.txt -out server.key`);
+
+  // Creates a server.crt
+  runCommand(`openssl x509 -req -days 36500 -in server.csr -signkey server.key -out server.crt`);
+
+  //Move .crt and .key to ./cert/ssl.*
+  runCommand(`mkdir ${repoLocation}\\cert && mv server.crt ${repoLocation}\\cert\\ssl.crt && mv server.key ${repoLocation}\\cert\\ssl.key`);
+
+  // Cleanup
+  runCommand(`rm passphrase.txt server.csr server.key.org`);
+}
 
 function runIstallation() {
   const githubRepo = `https://github.com/jornejongsma/create-app`;
@@ -53,16 +92,11 @@ function runIstallation() {
   const installDepthCommand = `cd ${repoName} && yarn install --silent`;
 
   console.log(`Cloning the repository with name ${repoName}`);
-  const checkedOut = runCommand(gitCheckoutCommand);
-  if (!checkedOut) process.exit(1);
+  runCommand(gitCheckoutCommand);
 
   console.log(`Installing dependencies for ${repoName}`);
-  const installedDeps = runCommand(installDepthCommand);
-  if (!installedDeps) process.exit(1);
+  runCommand(installDepthCommand);
 
- 
-  const folder = process.cwd();
-  const repoLocation = `${folder}\\${repoName}`;
   const binLocation = `${repoLocation}\\bin`;
   const githubLocation = `${repoLocation}\\.github`;
   const gitLocation = `${repoLocation}\\.git`;
@@ -93,6 +127,8 @@ function runIstallation() {
   const writeWorkspace = writeFile(workspaceLocation, rawWorkspace);
   if (!writeWorkspace) process.exit(1);
 
+  genCertificate();
+
   console.log(`Remove up bin and .github from ${repoName}`);
   const deleteBin = deleteFolder(binLocation);
   if (!deleteBin) process.exit(1);
@@ -106,8 +142,7 @@ function runIstallation() {
   const gitCommit = `git commit -q -m "first commit"`;
   const gitBranch = `git branch -M main`;
   const startGitCommand = `cd ${repoName} && ${gitInit} && ${gitAddAll} && ${gitCommit} && ${gitBranch}`;
-  const startGit = runCommand(startGitCommand);
-  if (!startGit) process.exit(1);
+  runCommand(startGitCommand);
 
   console.log('Congratulations, you are ready!');
 }

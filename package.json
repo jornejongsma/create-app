@@ -1,6 +1,6 @@
 {
   "name": "@jornejongsma/create-app",
-  "version": "1.0.30",
+  "version": "1.0.31",
   "main": "index.js",
   "license": "MIT",
   "bin": "./bin/cli.js",
@@ -11,7 +11,7 @@
     "build": "webpack --config-name buildConfig --progress",
     "dev": "webpack --config-name devConfig --progress",
     "start": "webpack serve --config-name devConfig",
-    "https": "cd dist && http-server -S -C ../ssl.crt -K ../ssl.key -p 8081"
+    "https": "cd dist && http-server -S -C ../cert/ssl.crt -K ../cert/ssl.key -p 8081"
   },
   "dependencies": {
     "@xstate/inspect": "^0.5.2",
