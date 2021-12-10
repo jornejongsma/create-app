@@ -97,13 +97,13 @@ function genCertificate(openSSL) {
 }
 
 function runIstallation() {
-  console.log(`Cloning the repository with name ${repoName}`); //niet perse nodig?!
+  // console.log(`Cloning the repository with name ${repoName}`); //niet perse nodig?!
   const githubRepo = `https://github.com/jornejongsma/create-app`;
-  const gitCheckoutCommand = `git clone --quiet --depth 1 ${githubRepo} ${repoName}`; //Zou dit command silent kunnen? Hier zitten wel echt progressie logs aanvast
+  const gitCheckoutCommand = `git clone --quiet --depth 1 ${githubRepo} ${repoName}`;
   runCommand(gitCheckoutCommand);
 
-  console.log(`Installing dependencies for ${repoName}`); //Volgende Fase
-  const installDepthCommand = `cd ${repoName} && yarn install --silent`; //Deze is al Silent...
+  // console.log(`Installing dependencies for ${repoName}`); //Volgende Fase
+  const installDepthCommand = `cd ${repoName} && yarn install --silent`;
   runCommand(installDepthCommand);
 
   const binLocation = `${repoLocation}\\bin`;
@@ -139,7 +139,7 @@ function runIstallation() {
   const openSSL = getOpenSSL();
   openSSL ? genCertificate(openSSL) : console.error('Could not generate SSL Certificates: OpenSSL is not installed'); //In rood printen?
 
-  console.log(`Remove up bin and .github from ${repoName}`); //Zou in één log kunnen voor Cleanup?
+  // console.log(`Remove up bin and .github from ${repoName}`); //Zou in één log kunnen voor Cleanup?
   const deleteBin = deleteFolder(binLocation);
   if (!deleteBin) process.exit(1); //moet op deze 3 remove statements het script stoppen als het niet lukt?! En het lukt toch altijd wel!?
   const deleteGithub = deleteFolder(githubLocation);
@@ -157,5 +157,5 @@ function runIstallation() {
   runCommand(`cd ${repoName} && ${gitInit} && ${gitDeactivate} && ${gitAddAll} && ${gitCommit} && ${gitBranch} && ${gitActivate}`);
 
 
-  console.log('Congratulations, you are ready!'); //Kelurtje rood?!
+  console.log('Congratulations, you are ready!'); //Kelurtje groen?!
 }
