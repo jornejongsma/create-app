@@ -59,7 +59,7 @@ rl.on('close', () => {
   process.exit(0);
 });
 
-function isOpenSSL() {
+function getOpenSSL() {
   function runTest(command) {
     try {
       execSync(`${command}`, { stdio: 'pipe' });
@@ -70,34 +70,33 @@ function isOpenSSL() {
   }
 
   if (runTest(`openssl version`)) {
-    return true;
+    return 'openssl';
   } else if (runTest(`C:\\"Program Files"\\Git\\usr\\bin\\openssl version`)) {
-    return true;
+    return 'C:\\"Program Files"\\Git\\usr\\bin\\openssl';
   }
   return false;
 }
 
-function genCertificate() {
-  const opensslLoc = `C:\\Program Files\\Git\\usr\\bin\\openssl`;
-
+function genCertificate(openSSL) {
+  
   //Creates passphrase.txt
-  runCommand(`${opensslLoc} rand -base64 48 > passphrase.txt`);
+  runCommand(`${openSSL} rand -base64 48 > passphrase.txt`);
 
   // Creates server.key
-  runCommand(`${opensslLoc} genrsa -aes128 -passout file:passphrase.txt -out server.key 2048`);
+  runCommand(`${openSSL} genrsa -aes128 -passout file:passphrase.txt -out server.key 2048`);
 
   // Creates server.csr
   runCommand(
-    `${opensslLoc} req -new -passin file:passphrase.txt -key server.key -out server.csr -subj "/C=FR/O=krkr/OU=Domain Control Validated/CN=*.krkr.io"`
+    `${openSSL} req -new -passin file:passphrase.txt -key server.key -out server.csr -subj "/C=FR/O=krkr/OU=Domain Control Validated/CN=*.krkr.io"`
   );
 
   // First duplicate the server.key to server.key.org
   // Than remove passphrase from server.key
   runCommand(`cp server.key server.key.org`);
-  runCommand(`${opensslLoc} rsa -in server.key.org -passin file:passphrase.txt -out server.key`);
+  runCommand(`${openSSL} rsa -in server.key.org -passin file:passphrase.txt -out server.key`);
 
   // Creates a server.crt
-  runCommand(`${opensslLoc} x509 -req -days 36500 -in server.csr -signkey server.key -out server.crt`);
+  runCommand(`${openSSL} x509 -req -days 36500 -in server.csr -signkey server.key -out server.crt`);
 
   //Move .crt and .key to ./cert/ssl.*
   runCommand(`mkdir ${repoLocation}\\cert && mv server.crt ${repoLocation}\\cert\\ssl.crt && mv server.key ${repoLocation}\\cert\\ssl.key`);
@@ -147,7 +146,8 @@ function runIstallation() {
   const writeWorkspace = writeFile(workspaceLocation, rawWorkspace);
   if (!writeWorkspace) process.exit(1);
 
-  isOpenSSL() ? genCertificate() : console.error('Could not generate SSL Certificates: OpenSSL is not installed');
+  const openSSL = getOpenSSL();
+  openSSL ? genCertificate(openSSL) : console.error('Could not generate SSL Certificates: OpenSSL is not installed');
 
   console.log(`Remove up bin and .github from ${repoName}`);
   const deleteBin = deleteFolder(binLocation);
