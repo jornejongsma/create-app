@@ -24,11 +24,51 @@ function deleteFolder(location) {
   return true;
 }
 
+function deleteFile(location) {
+  try {
+    fs.rmSync(location);
+  } catch (error) {
+    console.error(`Failed to remove ${location}`);
+    return false;
+  }
+  return true;
+}
+
 function writeFile(location, data) {
   try {
     fs.writeFileSync(location, data);
   } catch (error) {
     console.error(`Failed to write ${location}`);
+    return false;
+  }
+  return true;
+}
+
+function copyFile(file, target) {
+  try {
+    fs.copyFileSync(file, target);
+  } catch (error) {
+    console.error(`Failed to copy ${file} to ${target}`);
+    return false;
+  }
+  return true;
+}
+
+function moveFile(oldName, newName) {
+  try {
+    fs.renameSync(oldName, newName);
+  } catch (error) {
+    console.error(`Failed to move ${oldName} to ${newName}`);
+    return false;
+  }
+  return true;
+}
+
+function makeDir(path) {
+  try {
+    fs.mkdirSync(path);
+  } catch (error) {
+    console.error(`Failed make directory: ${path}`);
     return false;
   }
   return true;
@@ -92,17 +132,24 @@ function genCertificate(openSSL) {
 
   // First duplicate the server.key to server.key.org
   // Than remove passphrase from server.key
-  runCommand(`cp server.key server.key.org`);
+  // runCommand(`cp server.key server.key.org`);
+  if(!copyFile('server.key', 'server.key.org')) return false
   runCommand(`${openSSL} rsa -in server.key.org -passin file:passphrase.txt -out server.key`);
 
   // Creates a server.crt
   runCommand(`${openSSL} x509 -req -days 36500 -in server.csr -signkey server.key -out server.crt`);
 
   //Move .crt and .key to ./cert/ssl.*
-  runCommand(`mkdir ${repoLocation}\\cert && mv server.crt ${repoLocation}\\cert\\ssl.crt && mv server.key ${repoLocation}\\cert\\ssl.key`);
-
+  // runCommand(`mkdir ${repoLocation}\\cert && mv server.crt ${repoLocation}\\cert\\ssl.crt && mv server.key ${repoLocation}\\cert\\ssl.key`);
+  if(!makeDir(`${repoLocation}\\cert`)) return false
+  if(!moveFile(`server.crt`, `${repoLocation}\\cert\\ssl.crt`)) return false
+  if(!moveFile(`server.key`, `${repoLocation}\\cert\\ssl.key`)) return false
+  
   // Cleanup
-  runCommand(`rm passphrase.txt server.csr server.key.org`);
+  // runCommand(`rm passphrase.txt server.csr server.key.org`);
+  if(!deleteFile(`passphrase.txt`)) return false
+  if(!deleteFile(`server.csr`)) return false
+  if(!deleteFile(`server.key.org`)) return false
 }
 
 function runIstallation() {
