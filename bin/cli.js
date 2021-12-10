@@ -117,9 +117,13 @@ function getOpenSSL() {
   return false;
 }
 
+// Source: https://gist.github.com/thbkrkr/aa16435cb6c183e55a33
 function genCertificate(openSSL) {
+  // short version
+  if(!makeDir(`${repoLocation}\\cert`)) return false
+  runCommand(`${openSSL} req -x509 -newkey rsa:4096 -nodes -out ${repoLocation}\\cert\\ssl.crt -keyout ${repoLocation}\\cert\\ssl.key -days 3650 -subj "/C=NL/O=-/OU=-/CN=-"`)
   
-  //Creates passphrase.txt
+  /* //Creates passphrase.txt
   runCommand(`${openSSL} rand -base64 48 > passphrase.txt`);
 
   // Creates server.key
@@ -149,7 +153,7 @@ function genCertificate(openSSL) {
   // runCommand(`rm passphrase.txt server.csr server.key.org`);
   if(!deleteFile(`passphrase.txt`)) return false
   if(!deleteFile(`server.csr`)) return false
-  if(!deleteFile(`server.key.org`)) return false
+  if(!deleteFile(`server.key.org`)) return false */
 }
 
 function runIstallation() {
