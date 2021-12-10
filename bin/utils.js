@@ -1,4 +1,4 @@
-import { execSync } from 'child_process';
+const { execSync } = require('child_process');
 
 export function runCommand(command) {
   try {
@@ -9,3 +9,7 @@ export function runCommand(command) {
   }
   return true;
 }
+
+module.exports = [
+  runCommand
+]

@@ -1,19 +1,8 @@
 #!/usr/bin/env node -r esm
 
-// import { execSync } from 'child_process';
-import fs from 'fs';
-import readLine from 'readline';
-import { runCommand } from './utils'
-
-// function runCommand(command) {
-//   try {
-//     execSync(`${command}`, { stdio: 'inherit' });
-//   } catch (error) {
-//     console.error(`Failed to execute ${command}`, error);
-//     return false;
-//   }
-//   return true;
-// }
+const fs = require('fs');
+const readLine = require('readline');
+const { runCommand } = require('./utils')
 
 function deleteFolder(location) {
   try {
