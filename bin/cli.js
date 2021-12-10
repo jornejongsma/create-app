@@ -145,10 +145,10 @@ function runIstallation() {
   const deleteGit = deleteFolder(gitLocation);
   if (!deleteGit) process.exit(1);
 
-  const gitInit = `git init`; //deze zou ook silent kunnen?
-  const gitAddAll = `git add . 1>/dev/null 2>/dev/null`;
-  const gitCommit = `git commit -q -m "first commit"`;
-  const gitBranch = `git branch -M main`;
+  const gitInit = `git init --quiet`; //deze zou ook silent kunnen?
+  const gitAddAll = `git add . --quiet`;
+  const gitCommit = `git commit --quiet -m "first commit"`;
+  const gitBranch = `git branch --quiet -M main`;
   const startGitCommand = `cd ${repoName} && ${gitInit} && ${gitAddAll} && ${gitCommit} && ${gitBranch}`;
   runCommand(startGitCommand);
 
