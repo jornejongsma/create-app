@@ -69,9 +69,9 @@ function isOpenSSL() {
     return true;
   }
 
-  if (runTest(`openssll version`)) {
+  if (runTest(`openssl version`)) {
     return true;
-  } else if (runTest(`C:\\"Program Files"\\Git\\usr\\bin\\openssll version`)) {
+  } else if (runTest(`C:\\"Program Files"\\Git\\usr\\bin\\openssl version`)) {
     return true;
   }
   return false;
