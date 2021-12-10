@@ -24,41 +24,11 @@ function deleteFolder(location) {
   return true;
 }
 
-function deleteFile(location) {
-  try {
-    fs.rmSync(location);
-  } catch (error) {
-    console.error(`Failed to remove ${location}`);
-    return false;
-  }
-  return true;
-}
-
 function writeFile(location, data) {
   try {
     fs.writeFileSync(location, data);
   } catch (error) {
     console.error(`Failed to write ${location}`);
-    return false;
-  }
-  return true;
-}
-
-function copyFile(file, target) {
-  try {
-    fs.copyFileSync(file, target);
-  } catch (error) {
-    console.error(`Failed to copy ${file} to ${target}`);
-    return false;
-  }
-  return true;
-}
-
-function moveFile(oldName, newName) {
-  try {
-    fs.renameSync(oldName, newName);
-  } catch (error) {
-    console.error(`Failed to move ${oldName} to ${newName}`);
     return false;
   }
   return true;
@@ -119,52 +89,19 @@ function getOpenSSL() {
 
 // Source: https://gist.github.com/thbkrkr/aa16435cb6c183e55a33
 function genCertificate(openSSL) {
-  // short version
   if(!makeDir(`${repoLocation}\\cert`)) return false
   runCommand(`${openSSL} req -x509 -newkey rsa:4096 -nodes -out ${repoLocation}\\cert\\ssl.crt -keyout ${repoLocation}\\cert\\ssl.key -days 3650 -subj "/C=NL/O=-/OU=-/CN=-"`, true)
-  
-  /* //Creates passphrase.txt
-  runCommand(`${openSSL} rand -base64 48 > passphrase.txt`);
-
-  // Creates server.key
-  runCommand(`${openSSL} genrsa -aes128 -passout file:passphrase.txt -out server.key 2048`);
-
-  // Creates server.csr
-  runCommand(
-    `${openSSL} req -new -passin file:passphrase.txt -key server.key -out server.csr -subj "/C=FR/O=krkr/OU=Domain Control Validated/CN=*.krkr.io"`
-  );
-
-  // First duplicate the server.key to server.key.org
-  // Than remove passphrase from server.key
-  // runCommand(`cp server.key server.key.org`);
-  if(!copyFile('server.key', 'server.key.org')) return false
-  runCommand(`${openSSL} rsa -in server.key.org -passin file:passphrase.txt -out server.key`);
-
-  // Creates a server.crt
-  runCommand(`${openSSL} x509 -req -days 36500 -in server.csr -signkey server.key -out server.crt`);
-
-  //Move .crt and .key to ./cert/ssl.*
-  // runCommand(`mkdir ${repoLocation}\\cert && mv server.crt ${repoLocation}\\cert\\ssl.crt && mv server.key ${repoLocation}\\cert\\ssl.key`);
-  if(!makeDir(`${repoLocation}\\cert`)) return false
-  if(!moveFile(`server.crt`, `${repoLocation}\\cert\\ssl.crt`)) return false
-  if(!moveFile(`server.key`, `${repoLocation}\\cert\\ssl.key`)) return false
-  
-  // Cleanup
-  // runCommand(`rm passphrase.txt server.csr server.key.org`);
-  if(!deleteFile(`passphrase.txt`)) return false
-  if(!deleteFile(`server.csr`)) return false
-  if(!deleteFile(`server.key.org`)) return false */
 }
 
 function runIstallation() {
+  
+  console.log(`Cloning the repository with name ${repoName}`); //niet perse nodig?!
   const githubRepo = `https://github.com/jornejongsma/create-app`;
-  const gitCheckoutCommand = `git clone --depth 1 ${githubRepo} ${repoName}`;
-  const installDepthCommand = `cd ${repoName} && yarn install --silent`;
-
-  console.log(`Cloning the repository with name ${repoName}`);
+  const gitCheckoutCommand = `git clone --depth 1 ${githubRepo} ${repoName}`; //Zou dit command silent kunnen? Hier zitten wel echt progressie logs aanvast
   runCommand(gitCheckoutCommand);
-
-  console.log(`Installing dependencies for ${repoName}`);
+  
+  console.log(`Installing dependencies for ${repoName}`); //Volgende Fase
+  const installDepthCommand = `cd ${repoName} && yarn install --silent`; //Deze is al Silent...
   runCommand(installDepthCommand);
 
   const binLocation = `${repoLocation}\\bin`;
@@ -198,22 +135,23 @@ function runIstallation() {
   if (!writeWorkspace) process.exit(1);
 
   const openSSL = getOpenSSL();
-  openSSL ? genCertificate(openSSL) : console.error('Could not generate SSL Certificates: OpenSSL is not installed');
+  openSSL ? genCertificate(openSSL) : console.error('Could not generate SSL Certificates: OpenSSL is not installed'); //In rood printen?
 
-  console.log(`Remove up bin and .github from ${repoName}`);
+  console.log(`Remove up bin and .github from ${repoName}`); //Zou in één log kunnen voor Cleanup?
   const deleteBin = deleteFolder(binLocation);
-  if (!deleteBin) process.exit(1);
+  if (!deleteBin) process.exit(1); //moet op deze 3 remove statements het script stoppen als het niet lukt?! En het lukt toch altijd wel!?
   const deleteGithub = deleteFolder(githubLocation);
   if (!deleteGithub) process.exit(1);
   const deleteGit = deleteFolder(gitLocation);
   if (!deleteGit) process.exit(1);
 
-  const gitInit = `git init`;
+  const gitInit = `git init`; //deze zou ook silent kunnen?
+  const gitConfig = `git config core.autocrlf true`;
   const gitAddAll = `git add .`;
   const gitCommit = `git commit -q -m "first commit"`;
   const gitBranch = `git branch -M main`;
-  const startGitCommand = `cd ${repoName} && ${gitInit} && ${gitAddAll} && ${gitCommit} && ${gitBranch}`;
+  const startGitCommand = `cd ${repoName} && ${gitInit} && ${gitConfig} && ${gitAddAll} && ${gitCommit} && ${gitBranch}`;
   runCommand(startGitCommand);
 
-  console.log('Congratulations, you are ready!');
+  console.log('Congratulations, you are ready!'); //Kelurtje rood?!
 }
