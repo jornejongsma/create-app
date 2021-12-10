@@ -34,7 +34,9 @@ function writeFile(location, data) {
   return true;
 }
 
+const folder = process.cwd();
 let repoName = process.argv[2];
+let repoLocation = `${folder}\\${repoName}`;
 
 const rl = readLine.createInterface({
   input: process.stdin,
@@ -44,6 +46,7 @@ const rl = readLine.createInterface({
 if (!repoName) {
   rl.question('Enter a repo-name:', (name) => {
     repoName = name;
+    repoLocation = `${folder}\\${repoName}`;
     rl.close();
   });
 } else {
@@ -56,8 +59,6 @@ rl.on('close', () => {
   process.exit(0);
 });
 
-const folder = process.cwd();
-const repoLocation = `${folder}\\${repoName}`;
 
 function genCertificate() {
   //Creates passphrase.txt
