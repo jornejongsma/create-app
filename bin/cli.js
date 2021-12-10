@@ -1,18 +1,19 @@
-#!/usr/bin/env node
+#!/usr/bin/env node -r esm
 
-const { execSync } = require('child_process');
-const fs = require('fs');
-const readline = require('readline');
+// import { execSync } from 'child_process';
+import fs from 'fs';
+import readLine from 'readline';
+import { runCommand } from './utils'
 
-function runCommand(command) {
-  try {
-    execSync(`${command}`, { stdio: 'inherit' });
-  } catch (error) {
-    console.error(`Failed to execute ${command}`, error);
-    return false;
-  }
-  return true;
-}
+// function runCommand(command) {
+//   try {
+//     execSync(`${command}`, { stdio: 'inherit' });
+//   } catch (error) {
+//     console.error(`Failed to execute ${command}`, error);
+//     return false;
+//   }
+//   return true;
+// }
 
 function deleteFolder(location) {
   try {
@@ -36,7 +37,7 @@ function writeFile(location, data) {
 
 let repoName = process.argv[2];
 
-const rl = readline.createInterface({
+const rl = readLine.createInterface({
   input: process.stdin,
   output: process.stdout,
 });
@@ -70,7 +71,7 @@ function runIstallation() {
   const installedDeps = runCommand(installDepthCommand);
   if (!installedDeps) process.exit(1);
 
-  console.log(`Remove up bin and .github from ${repoName}`);
+ 
   const folder = process.cwd();
   const repoLocation = `${folder}\\${repoName}`;
   const binLocation = `${repoLocation}\\bin`;
@@ -103,6 +104,7 @@ function runIstallation() {
   const writeWorkspace = writeFile(workspaceLocation, rawWorkspace);
   if (!writeWorkspace) process.exit(1);
 
+  console.log(`Remove up bin and .github from ${repoName}`);
   const deleteBin = deleteFolder(binLocation);
   if (!deleteBin) process.exit(1);
   const deleteGithub = deleteFolder(githubLocation);
