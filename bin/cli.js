@@ -2,7 +2,7 @@
 
 const fs = require('fs');
 const readLine = require('readline');
-const { runCommand } = require('./utils')
+const { runCommand } = require('./utils.js')
 
 function deleteFolder(location) {
   try {
