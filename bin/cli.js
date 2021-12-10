@@ -99,7 +99,7 @@ function genCertificate(openSSL) {
 function runIstallation() {
   console.log(`Cloning the repository with name ${repoName}`); //niet perse nodig?!
   const githubRepo = `https://github.com/jornejongsma/create-app`;
-  const gitCheckoutCommand = `git clone --depth 1 ${githubRepo} ${repoName}`; //Zou dit command silent kunnen? Hier zitten wel echt progressie logs aanvast
+  const gitCheckoutCommand = `git clone --quiet --depth 1 ${githubRepo} ${repoName}`; //Zou dit command silent kunnen? Hier zitten wel echt progressie logs aanvast
   runCommand(gitCheckoutCommand);
 
   console.log(`Installing dependencies for ${repoName}`); //Volgende Fase
@@ -146,13 +146,6 @@ function runIstallation() {
   if (!deleteGithub) process.exit(1);
   const deleteGit = deleteFolder(gitLocation);
   if (!deleteGit) process.exit(1);
-
-  // const gitInit = `git init --quiet`; //deze zou ook silent kunnen?
-  // const gitAddAll = `git add . --quiet`;
-  // const gitCommit = `git commit --quiet -m "first commit"`;
-  // const gitBranch = `git branch --quiet -M main`;
-  // const startGitCommand = `cd ${repoName} && ${gitInit} && ${gitAddAll} && ${gitCommit} && ${gitBranch}`;
-  // runCommand(startGitCommand);
 
   const gitInit = `git init --quiet`;
   const gitDeactivate = `git config core.autocrlf false`;
