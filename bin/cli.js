@@ -182,5 +182,5 @@ function runIstallation() {
 
 
   console.log('Congratulations, you are ready!'.color(lc.FgGreen));
-  console.log('Type : ', `${repoName}/${repoName}.code-workspace`.color(lc.FgYellow), ' to open this repo in VS-Code');
+  console.log('To open this repo in VS-Code, type :', `cd ${repoName} && ${repoName}.code-workspace`.color(lc.FgYellow));
 }
