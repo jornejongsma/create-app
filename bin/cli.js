@@ -130,7 +130,8 @@ function genCertificate(openSSL) {
 
 function runIstallation() {
   const githubRepo = `https://github.com/jornejongsma/create-app`;
-  const gitCheckoutCommand = `git clone --quiet --depth 1 ${githubRepo} ${repoName}`;
+  const brach = `typescript`
+  const gitCheckoutCommand = `git clone --quiet --branch ${brach} --single-branch --depth 1 ${githubRepo} ${repoName}`;
   runCommand(gitCheckoutCommand);
 
   const installDepthCommand = `cd ${repoName} && yarn install --silent`;
