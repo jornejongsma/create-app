@@ -4,11 +4,43 @@ const fs = require('fs');
 const readLine = require('readline');
 const { execSync } = require('child_process');
 
+const lc = {
+  Reset: "\x1b[0m",
+  Bright: "\x1b[1m",
+  Dim: "\x1b[2m",
+  Underscore: "\x1b[4m",
+  Blink: "\x1b[5m",
+  Reverse: "\x1b[7m",
+  Hidden: "\x1b[8m",
+
+  FgBlack: "\x1b[30m",
+  FgRed: "\x1b[31m",
+  FgGreen: "\x1b[32m",
+  FgYellow: "\x1b[33m",
+  FgBlue: "\x1b[34m",
+  FgMagenta: "\x1b[35m",
+  FgCyan: "\x1b[36m",
+  FgWhite: "\x1b[37m",
+
+  BgBlack: "\x1b[40m",
+  BgRed: "\x1b[41m",
+  BgGreen: "\x1b[42m",
+  BgYellow: "\x1b[43m",
+  BgBlue: "\x1b[44m",
+  BgMagenta: "\x1b[45m",
+  BgCyan: "\x1b[46m",
+  BgWhite: "\x1b[47m",
+};
+
+String.prototype.color = function (color) {
+  return `${color}${this}${lc.Reset}`;
+};
+
 function runCommand(command, silent) {
   try {
     execSync(`${command}`, { stdio: silent ? 'pipe' : 'inherit' });
   } catch (error) {
-    console.error(`Failed to execute ${command}`, error);
+    console.error(`Failed to execute ${command}`.color(lc.FgRed), error);
     process.exit(1);
   }
   return true;
@@ -18,7 +50,7 @@ function deleteFolder(location) {
   try {
     fs.rmSync(location, { recursive: true });
   } catch (error) {
-    console.error(`Failed to remove ${location}`);
+    console.error(`Failed to remove ${location}`.color(lc.FgRed), error);
     return false;
   }
   return true;
@@ -28,8 +60,8 @@ function writeFile(location, data) {
   try {
     fs.writeFileSync(location, data);
   } catch (error) {
-    console.error(`Failed to write ${location}`);
-    return false;
+    console.error(`Failed to write ${location}`.color(lc.FgRed), error);
+    process.exit(1)
   }
   return true;
 }
@@ -38,7 +70,7 @@ function makeDir(path) {
   try {
     fs.mkdirSync(path);
   } catch (error) {
-    console.error(`Failed make directory: ${path}`);
+    console.error(`Failed make directory: ${path}`.color(lc.FgRed), error);
     return false;
   }
   return true;
@@ -87,7 +119,7 @@ function getOpenSSL() {
   return false;
 }
 
-// Source: https://gist.github.com/thbkrkr/aa16435cb6c183e55a33
+// Reference: https://gist.github.com/thbkrkr/aa16435cb6c183e55a33
 function genCertificate(openSSL) {
   if (!makeDir(`${repoLocation}\\cert`)) return false;
   runCommand(
@@ -97,12 +129,10 @@ function genCertificate(openSSL) {
 }
 
 function runIstallation() {
-  // console.log(`Cloning the repository with name ${repoName}`); //niet perse nodig?!
   const githubRepo = `https://github.com/jornejongsma/create-app`;
   const gitCheckoutCommand = `git clone --quiet --depth 1 ${githubRepo} ${repoName}`;
   runCommand(gitCheckoutCommand);
 
-  // console.log(`Installing dependencies for ${repoName}`); //Volgende Fase
   const installDepthCommand = `cd ${repoName} && yarn install --silent`;
   runCommand(installDepthCommand);
 
@@ -119,9 +149,8 @@ function runIstallation() {
   newPackage['private'] = true;
 
   const newRawPackage = JSON.stringify(newPackage, null, 2);
-  const writePackage = writeFile(packageLocation, newRawPackage);
-  if (!writePackage) process.exit(1);
-
+  writeFile(packageLocation, newRawPackage);
+  
   const workspaceData = {
     folders: [
       {
@@ -133,19 +162,14 @@ function runIstallation() {
 
   const workspaceLocation = `${repoLocation}\\${repoName}.code-workspace`;
   const rawWorkspace = JSON.stringify(workspaceData, null, 2);
-  const writeWorkspace = writeFile(workspaceLocation, rawWorkspace);
-  if (!writeWorkspace) process.exit(1);
-
+  writeFile(workspaceLocation, rawWorkspace);
+  
   const openSSL = getOpenSSL();
-  openSSL ? genCertificate(openSSL) : console.error('Could not generate SSL Certificates: OpenSSL is not installed'); //In rood printen?
+  openSSL ? genCertificate(openSSL) : console.error('Could not generate SSL Certificates: OpenSSL is not installed'.color(lc.FgRed));
 
-  // console.log(`Remove up bin and .github from ${repoName}`); //Zou in één log kunnen voor Cleanup?
-  const deleteBin = deleteFolder(binLocation);
-  if (!deleteBin) process.exit(1); //moet op deze 3 remove statements het script stoppen als het niet lukt?! En het lukt toch altijd wel!?
-  const deleteGithub = deleteFolder(githubLocation);
-  if (!deleteGithub) process.exit(1);
-  const deleteGit = deleteFolder(gitLocation);
-  if (!deleteGit) process.exit(1);
+  deleteFolder(binLocation);
+  deleteFolder(githubLocation);
+  deleteFolder(gitLocation);
 
   const gitInit = `git init --quiet`;
   const gitDeactivate = `git config core.autocrlf false`;
@@ -157,5 +181,6 @@ function runIstallation() {
   runCommand(`cd ${repoName} && ${gitInit} && ${gitDeactivate} && ${gitAddAll} && ${gitCommit} && ${gitBranch} && ${gitActivate}`);
 
 
-  console.log('Congratulations, you are ready!'); //Kelurtje groen?!
+  console.log('Congratulations, you are ready!'.color(lc.FgGreen));
+  console.log('Type : ', `${repoName}/${repoName}.code-workspace`.color(lc.FgYellow), ' to open this repo in VS-Code');
 }
