@@ -41,10 +41,22 @@ const commonConfig = (settings) => ({
         test: /\.(png|jpe?g|gif)$/i,
         type: 'asset/resource',
       },
+      // {
+      //   test: /\.(woff|woff2|eot|ttf|otf)$/i,
+      //   type: 'asset/resource',
+      // },
       {
         test: /\.(woff|woff2|eot|ttf|otf)$/i,
-        type: 'asset/resource',
-      },
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 50000,
+              name: './fonts/[name].[ext]',
+            }
+          }
+        ]
+      }
     ],
   },
   plugins: [
