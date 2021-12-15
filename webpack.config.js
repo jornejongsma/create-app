@@ -64,7 +64,9 @@ const commonConfig = (settings) => ({
   devServer: {
     static: `./${settings.dist}`,
     historyApiFallback: true,
-    https: true,
+    server: {
+      type: 'https'
+    },
     host: require('os').hostname().toLowerCase(),
     port: settings.devPort,
     open: false,
