@@ -21,7 +21,7 @@ const commonConfig = (settings) => ({
     filename: './[name].bundle.js',
   },
   resolve: {
-    extensions: ['.js', '.jsx', '.css', '.scss'],
+    extensions: ['.ts', '.tsx', '.js', '.css', '.scss'],
     // alias: {
     //   process: 'process/browser',
     //   stream: 'stream-browserify',
@@ -31,10 +31,10 @@ const commonConfig = (settings) => ({
   },
   module: {
     rules: [
-      { test: /\.(js|jsx)$/, loader: 'babel-loader', exclude: /node_modules/ },
+      { test: /\.tsx?$/, loader: 'ts-loader' },
       {
         test: /\.(s[ac]ss|css)$/,
-        use: ['style-loader', { loader: 'css-loader' }, 'sass-loader'],
+        use: ['style-loader', { loader: 'css-loader', options: { url: false } }, 'sass-loader'],
         exclude: [/\.module\.(s[ac]ss|css)$/],
       },
       {
