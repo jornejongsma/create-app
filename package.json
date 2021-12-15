@@ -1,6 +1,6 @@
 {
   "name": "@jornejongsma/create-app",
-  "version": "1.0.52",
+  "version": "1.0.53",
   "main": "index.js",
   "license": "MIT",
   "bin": "./bin/cli.js",
