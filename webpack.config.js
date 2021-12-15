@@ -39,7 +39,7 @@ const commonConfig = (settings) => ({
       },
       {
         test: /\.(png|jpe?g|gif)$/i,
-        use: [{ loader: 'url-loader' }],
+        type: 'asset/resource',
       },
       {
         test: /\.(woff|woff2|eot|ttf|otf)$/i,
