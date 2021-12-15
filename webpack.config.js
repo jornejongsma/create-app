@@ -4,7 +4,7 @@ const webpack = require('webpack');
 const settings = {
   devName: 'devConfig',
   buildName: 'buildConfig',
-  entry: 'src/index.jsx',
+  entry: 'src/index.tsx',
   dist: 'dist',
   htmlTemplate: 'templates/index.html',
   devPort: 8080
