@@ -1,12 +1,14 @@
 import React from 'react';
 import './style/main.scss';
 import Helmet from './components/helmet';
+import logo from './style/images/jj-logo.jpg'
 
 const App = () => {
   return (
     <>
       <Helmet title={"React App"}/>
-      <div>Hello World</div>
+      <div>Javascript App</div>
+      <img src={logo}/>
     </>
   );
 };

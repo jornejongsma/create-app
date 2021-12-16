@@ -1,6 +1,7 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
 
+// Bron: https://dev.to/smelukov/webpack-5-asset-modules-2o3h
 const settings = {
   devName: 'devConfig',
   buildName: 'buildConfig',
@@ -19,6 +20,7 @@ const commonConfig = (settings) => ({
   output: {
     path: `${__dirname}/${settings.dist}`,
     filename: './[name].bundle.js',
+    assetModuleFilename: './assets/[name][ext]'
   },
   resolve: {
     extensions: ['.js', '.jsx', '.css', '.scss'],
@@ -43,7 +45,7 @@ const commonConfig = (settings) => ({
       },
       {
         test: /\.(woff|woff2|eot|ttf|otf)$/i,
-        type: 'asset/resource',
+        type: 'asset/resource', 
       },
     ],
   },
