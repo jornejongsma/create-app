@@ -526,16 +526,11 @@ function runInstall() {
 }
 
 // THE PROGRAM!!!
-
-String.prototype.color = function (color) {
-  return `${color}${this}${lc.Reset}`;
-};
-
 function runCommand(command, silent) {
   try {
     execSync(`${command}`, { stdio: silent ? "pipe" : "inherit" });
   } catch (error) {
-    console.error(`Failed to execute ${command}`.color(lc.FgRed), error);
+    console.error(`${lc.FgRed}Failed to execute ${command}${lc.Reset}`, error);
     process.exit(1);
   }
   return true;
@@ -545,7 +540,7 @@ function deleteFolder(location) {
   try {
     fs.rmSync(location, { recursive: true });
   } catch (error) {
-    console.error(`Failed to remove ${location}`.color(lc.FgRed), error);
+    console.error(`${lc.FgRed}Failed to remove ${location}${lc.Reset}`, error);
     return false;
   }
   return true;
@@ -555,7 +550,7 @@ function writeFile(location, data) {
   try {
     fs.writeFileSync(location, data);
   } catch (error) {
-    console.error(`Failed to write ${location}`.color(lc.FgRed), error);
+    console.error(`${lc.FgRed}Failed to write ${location}${lc.Reset}`, error);
     process.exit(1);
   }
   return true;
@@ -565,7 +560,7 @@ function makeDir(path) {
   try {
     fs.mkdirSync(path);
   } catch (error) {
-    console.error(`Failed make directory: ${path}`.color(lc.FgRed), error);
+    console.error(`${lc.FgRed}Failed make directory: ${path}${lc.FgRed}`, error);
     return false;
   }
   return true;
@@ -647,9 +642,7 @@ function runIstallation() {
   openSSL
     ? genCertificate(openSSL)
     : console.error(
-        "Could not generate SSL Certificates: OpenSSL is not installed".color(
-          lc.FgRed
-        )
+        `${lc.FgRed}Could not generate SSL Certificates: OpenSSL is not installed${lc.Reset}`
       );
 
   deleteFolder(binLocation);
@@ -667,7 +660,7 @@ function runIstallation() {
     `cd ${repoName} && ${gitInit} && ${gitDeactivate} && ${gitAddAll} && ${gitCommit} && ${gitBranch} && ${gitActivate}`
   );
 
-  print("Congratulations, you are ready!\n".color(lc.FgGreen));
-  print(`To open this repo in VS-Code, type: cd ${repoName} && ${repoName}.code-workspace\n`.color(lc.FgYellow));
+  print(`${lc.FgGreen}Congratulations, you are ready!${lc.Reset}\n`);
+  print(`To open this repo in VS-Code, type: ${lc.FgYellow}cd ${repoName} && ${repoName}.code-workspace${lc.Reset}\n`);
   process.exit(0);
 }
