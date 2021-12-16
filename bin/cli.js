@@ -194,7 +194,7 @@ const settings = {
   target: WEB,
   testing: NO,
   documentation: NO,
-  repoLocation: undefined,
+  repoLocation: input.repoLocation,
 };
 
 const rl = readLine.createInterface({
