@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactHelmet from 'react-helmet';
-// import icon from '../style/images/jj-logo-32x32.png';
+import icon from '../style/images/jj-logo-32x32.png';
 
 interface Props {
   title: string;
@@ -9,7 +9,7 @@ interface Props {
 const Helmet: React.FC<Props> = ({title}) => {
   return (
     <ReactHelmet>
-      {/* <link rel="icon" href={icon}></link> */}
+      <link rel="icon" href={icon}></link>
       <title>{title}</title>
     </ReactHelmet>
   );

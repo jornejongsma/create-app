@@ -19,6 +19,7 @@ const commonConfig = (settings) => ({
   output: {
     path: `${__dirname}/${settings.dist}`,
     filename: './[name].bundle.js',
+    assetModuleFilename: 'assets/[name][ext]'
   },
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '.css', '.scss'],
@@ -41,22 +42,10 @@ const commonConfig = (settings) => ({
         test: /\.(png|jpe?g|gif)$/i,
         type: 'asset/resource',
       },
-      // {
-      //   test: /\.(woff|woff2|eot|ttf|otf)$/i,
-      //   type: 'asset/resource',
-      // },
       {
         test: /\.(woff|woff2|eot|ttf|otf)$/i,
-        use: [
-          {
-            loader: 'url-loader',
-            options: {
-              limit: 50000,
-              name: './fonts/[name].[ext]',
-            }
-          }
-        ]
-      }
+        type: 'asset/resource',
+      },
     ],
   },
   plugins: [
